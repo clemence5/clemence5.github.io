@@ -16,11 +16,11 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Clemence Mungwariri"
+title                    : "Site Title"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "Clemence Mungwariri"
-description              : "Data Science Portfolio"
+name                     : "Your Name"
+description              : "An amazing website."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -107,10 +107,10 @@ analytics:
 
 # Site Author
 author:
-  name             : "Clemence Mungwariri"
-  avatar           : "/images/ska_bursary_con.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "This is my data science Portfolio"
-  location         : "Cape Town"
+  name             : "Your Name"
+  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  bio              : "I am an **amazing** person."
+  location         : "Somewhere"
   email            :
   links:
     - label: "Email"
@@ -223,7 +223,7 @@ permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
 paginate_path: /page:num/
 timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-future: true
+
 
 # Plugins (previously gems:)
 plugins:
@@ -283,8 +283,8 @@ compress_html:
 defaults:
   # _posts
   - scope:
-    path: ""
-    type: posts
+      path: ""
+      type: posts
     values:
       layout: single
       author_profile: true
@@ -292,11 +292,3 @@ defaults:
       comments: # true
       share: true
       related: true
-
-  # _pages
-  - scope:
-      path: ""
-      type: pages
-    values:
-      layout: single
-      author_profile: true
