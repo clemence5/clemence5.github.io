@@ -16,7 +16,7 @@ mathjax: true
 ## Preparing Absenteeism data for inspection via ML.
 In this exercise, we go through the multiple columns in the dataset and prepare them for the Machine Learning algorithms we will later deploy to find out what intuitions are buried in the data.
 
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/feature_descriptions.png" width="2500" height="2300" alt="Feature descriptions">
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/feature_descriptions2.png" width="2500" height="2300" alt="Feature descriptions">
 
 Later, we will develop a ML algorithm, the `Logistic Regression` and analyse the results with the aim of predicting when and why typically miss work in a business environment.
 This helps businesses save a lot of money by anticipating absenteeism and deploying measures that minimise the resulting loss in productivity.  
