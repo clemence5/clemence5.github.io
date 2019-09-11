@@ -39,7 +39,8 @@ raw.head()
 
 From the file header we see the columns from left to right and data they contain in each row.
 
-A `Logistic Regression` is an equation of the 
+A `Logistic Regression` is an equation of the dependent variable to the predictors/inputs, which are used to predict the target. A logistic regression, for each given row/observation, predicts a binary/ `True` or `False` response for the dependent variable. In our case, after preprocessing we will be feeding our regression with the first `n-1` columns in order to predict the `n$$^{th}$$` column.
+After eyeballing our columns, we see that the dependent variable we wish to predict is housed in the `Absenteeism Time in Hours` column at the rightmost end of the columns.
 
 We can also get an initial idea of the dataset by displaying a concise summary of the data contained in each column:
 ```python
