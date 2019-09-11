@@ -15,7 +15,10 @@ mathjax: true
 
 ## Preparing Absenteeism data for inspection via ML.
 In this exercise, we go through the multiple columns in the dataset and prepare them for the Machine Learning algorithms we will later deploy to find out what intuitions are buried in the data.
-Later, we will develop ML algorithms and analyse the results with the aim of understanding why, when and how people miss typically work in a business environment. This helps businesses save a lot of money by anticipating absenteeism and deploying measures that minimise the resulting loss in productivity.  
+
+Later, we will develop ML algorithms and analyse the results with the aim of understanding why, when and how people miss typically work in a business environment.
+This helps businesses save a lot of money by anticipating absenteeism and deploying measures that minimise the resulting loss in productivity.  
+
 The preparation involves extracting relevant data, dropping irrelevant columns and converting the data types in columns to usable format.
 
 ### The Dataset
