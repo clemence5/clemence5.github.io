@@ -18,7 +18,7 @@ minimal_mistakes_skin    : "mint" # "default" # "air", "aqua", "contrast", "dark
 locale                   : "en-US"
 title                    : "Clemence Mungwariri"
 title_separator          : "-"
-subtitle                 : # site tagline that appears below site title in masthead
+subtitle                 : "MSc Physics Candidate" # site tagline that appears below site title in masthead
 name                     : "Clemence Mungwariri"
 description              : "Data Science Portfolio"
 url                      : "https://clemence5.github.io/" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
@@ -108,7 +108,7 @@ analytics:
 # Site Author
 author:
   name             : "Clemence Mungwariri"
-  avatar           : "/images/ska_bursary_con.jpg"# path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/images/ska_bursary_con.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Data Science Portfolio"
   location         : "Cape Town, South Africa"
   email            :
