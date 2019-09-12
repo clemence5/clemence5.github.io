@@ -25,7 +25,7 @@ Later, we will develop a ML algorithm, the `Logistic Regression` and analyse the
 This helps businesses save money by anticipating absenteeism and deploying measures that minimise the resulting loss in productivity.  
 
 
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/feature_descriptions2.png" width="2500" height="2300" alt="Feature descriptions">
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/feature_descriptions2.png" width="2000" height="1600" alt="Feature descriptions">
 
 ### Aim
 
