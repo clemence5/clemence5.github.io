@@ -154,17 +154,102 @@ cols_reordered = ['reason_1', 'reason_2', 'reason_3', 'reason_4', 'Date', 'Trans
                      'Age', 'Daily Work Load Average', 'Body Mass Index', 'Education', 'Children', 'Pets', 'Absenteeism Time in Hours']
 df = df[cols_reordered]
 ```
-At this point, we have repositioned the reasons for absence at the begining of the columns list in the data frame.
+At this point, we have repositioned the reasons for absence at the beginning of the columns list in the data frame.
 
 ## The Date Column
 
-After
+The next column to handle is the Date column.
+```python
+print(df_reason.Date.head())
+df_reason.Date.dtype
+```
+The `date` column's entries are strings. Let's convert these dates from string to the `datetime` format, also known as a `Timestamp`:
+```python
+df_reason.Date = pd.to_datetime(df_reason.Date, format='%d/%m/%Y')
+```
+This changes the datatype of the observations in this column from Objects (the pandas name for strings) to 64-bit datetime entries.
 
+Now, we would like to understand the monthly and weekly trends in absenteeism. We would thus like to extract the month value from each date entry:
+```python
+df_reason.Date[1], df_reason.Date[1].month
+>> (Timestamp('2015-07-14 00:00:00'), 7)
+```
+The second (arbitrary example) entry has a date of 14 July 2015.
+We extract the month value by appending  .𝚖𝚘𝚗𝚝𝚑  to the end of the Timestamp
+Let's extract the month values and make a separate column for them
 
+```python
+months = []
+for i, j in enumerate(df_reason.Date):
+  months.append(j.month)
+```
+Let's put these month values in the dataframe
+```python
+df_reason['Month'] = months
+```
+We can similarly extract the day of the week.
+NB: Due to Python's zero-indexing, the first weekday, Monday has an index of 0, amd the final day of each week, Friday, has an index of 4.
 
+```python
+day = []
+for i, j in enumerate(df_reason.Date):
+  day.append(j.weekday())
+df_reason['Day of the Week'] = day
+```
+Now that we got all the information we need from the `date` column, we can drop that column and them move the month and weekday column to replace it.
+```python
+df_reason = df_reason.drop(['Date'], axis=1)
+df_reason.columns.values
 
+colnames = ['reason_1', 'reason_2', 'reason_3', 'reason_4', 'Month',
+       'Day of the Week', 'Transportation Expense', 'Distance to Work',
+       'Age', 'Daily Work Load Average', 'Body Mass Index', 'Education',
+       'Children', 'Pets', 'Absenteeism Time in Hours']
+df_reason = df_reason[colnames]
+```
 
+## Education Column
 
+The next column we consider is the Education column.
+```python
+df_reason_date['Education'].unique(), df_reason_date.Education.nunique()
+```
+How are the different education levels represented in our data sample?
+
+```python
+df.Education.value_counts().plot('bar')
+plt.xlabel('1=High school, 2=undergrad, 3=postgrad, 4=MSc/PhD')
+plt.title('Education Level Counts')
+plt.ylabel('Counts')
+plt.savefig('education.png', figsize=(16, 12), dpi=80)
+plt.show()
+```
+
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/education.png" alt="Raw Data header">
+
+The majority of the people surveyed have a high school education, followed by postgraduates (Honours) and then undergraduates and MSc/PhD holders, in that order.
+
+Since the number of high-school graduates is much higher than the tertiary educated counts, we lump all the tertiary educated observations together:
+
+0 -- high school
+
+1 -- tertiary
+
+```python
+df_reason_date.Education = df_reason_date.Education.map({1:0, 2:1, 3:1, 4:1})
+100*sum(df_reason_date.Education)/len(df_reason_date.Education)
+```
+Only 16.71% of the surveyed observations have a tertiary education.
+We will later investigate how education level relates to absenteeism.
+
+That's it!
+For now we can take this to be our full preprocessed data set.
+
+After saving the preprocessed dataframe in a variable, the next thing to do is create a ML model to look for trends in the data that can explain why and when absenteeism occurs in the workplace, as well as who typically absconds
+
+```python
+df_preprocessed.to_csv('absenteeism_data_preprocessed.csv', index=False)
+```
 
 
 
