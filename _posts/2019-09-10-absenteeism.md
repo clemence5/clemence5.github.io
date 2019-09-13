@@ -4,7 +4,7 @@ date: 2019-09-10
 tags: [Preprocessing]
 excerpt: "Machine Learning, Absenteeism, Business, Data Science"
 header:
-  overlay_image: "/images/absenteeism/absenteeism-1831x1200.png"
+  overlay_image: "/images/absenteeism/absenteeism_head.png"
   overlay_filter: 0.5
   caption: "Credit: [**CallCentreHelper**](https://www.callcentrehelper.com/managing-absenteeism-in-the-call-centre-168.htm)"
   actions:
