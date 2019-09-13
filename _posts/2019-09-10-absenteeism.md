@@ -24,8 +24,7 @@ We will begin by preprocessing our dataset.
 Later, we will develop a ML algorithm, the `Logistic Regression` and analyse the results with the aim of predicting when and why employees typically miss work in a business environment.
 This helps businesses save money by anticipating absenteeism and deploying measures that minimise the resulting loss in productivity.  
 
-
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/feature_descriptions2.png" width="2000" height="1600" alt="Feature descriptions">
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/feature_description2.png" width="2500" height="2300" alt="Feature Descriptions">
 
 ### Aim
 
@@ -39,7 +38,7 @@ The data, and some of the code used in this article are adapted from [Data Scien
 
 # The dataset will be uploaded on GitHub on the link below
 ### Loading the dataset:
-We begin by importing the relevant libraries: `numpy`, which allows us to work with numbers and manipulate arrays with ease, and `pandas`, which is designed for working with `*pa*nel *da*ta`.
+We begin by importing the relevant libraries: `numpy`, which allows us to work with numbers and manipulate arrays with ease, and `pandas`, which is designed for working with *pa*nel *da*ta.
 
 ```python
 import numpy as np  # For array manipulation
@@ -104,7 +103,7 @@ print(np.shape(reason_columns))  #700 observations vs 28 reasons for absence.
 
 reason_columns.columns.values
 ```
-We removed the zeroth dummy variable to avoid [https://www.quora.com/How-and-why-having-the-same-number-of-dummy-variables-as-categories-is-problematic-in-linear-regression-Dummy-variable-trap-Im-looking-for-a-purely-mathematical-not-intuitive-explanation-Also-please-avoid-using-the/answer/Iliya-Valchanov?share=9494e990&srid=uX7Kg](multicollinearity) issues, usig `drop_first=True`.
+We removed the zeroth dummy variable to avoid [multicollinearity](https://www.quora.com/How-and-why-having-the-same-number-of-dummy-variables-as-categories-is-problematic-in-linear-regression-Dummy-variable-trap-Im-looking-for-a-purely-mathematical-not-intuitive-explanation-Also-please-avoid-using-the/answer/Iliya-Valchanov?share=9494e990&srid=uX7Kg0) issues, using `drop_first=True`.
 
 **Delete Reason for Absence column**
 We drop this column to again avoid multicollinearity issues; we will replace it with the dummy-encoded reasons columns.
