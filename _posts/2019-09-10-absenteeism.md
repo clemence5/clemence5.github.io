@@ -6,14 +6,14 @@ excerpt: "Machine Learning, Absenteeism, Business, Data Science"
 header:
   overlay_image: "/images/absenteeism/absenteeism_head.png"
   overlay_filter: 0.5
-  caption: "Credit: [**CallCentreHelper**](https://www.callcentrehelper.com/managing-absenteeism-in-the-call-centre-168.htm)"
+  caption: "Credit: [*mitrefinch*](https://www.mitrefinch.com.au/blog/time-and-attendance/5-tips-to-reduce-workplace-absenteeism/)"
   actions:
     - label: "View on Google Colab"
       url: "https://colab.research.google.com/drive/1VU3g2zU0iHDL5TFgbjxKee5Fc_cW3AEi"
 mathjax: true
 ---
 
-# Preparing Absenteeism data for inspection via ML.
+# Preprocessing Absenteeism data
 
 ## Introduction
 In the next **FEW** articles, we will try to find a solution to Absenteeism in the workplace.
@@ -250,27 +250,3 @@ After saving the preprocessed dataframe in a variable, the next thing to do is c
 ```python
 df_preprocessed.to_csv('absenteeism_data_preprocessed.csv', index=False)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-lol
