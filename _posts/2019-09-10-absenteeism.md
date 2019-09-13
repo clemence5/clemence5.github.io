@@ -4,7 +4,7 @@ date: 2019-09-10
 tags: [Preprocessing]
 excerpt: "Machine Learning, Absenteeism, Business, Data Science"
 header:
-  overlay_image: "/images/absenteeism/out-office-760.jpg"
+  overlay_image: "/images/absenteeism/absenteeism-1831x1200.png"
   overlay_filter: 0.5
   caption: "Credit: [**CallCentreHelper**](https://www.callcentrehelper.com/managing-absenteeism-in-the-call-centre-168.htm)"
   actions:
@@ -188,7 +188,7 @@ Let's put these month values in the dataframe
 df_reason['Month'] = months
 ```
 We can similarly extract the day of the week.
-NB: Due to Python's zero-indexing, the first weekday, Monday has an index of 0, amd the final day of each week, Friday, has an index of 4.
+NB: Due to Python's zero-indexing, the first weekday, Monday has an index of 0, and the final day of each week, Friday, has an index of 4.
 
 ```python
 day = []
@@ -225,7 +225,7 @@ plt.savefig('education.png', figsize=(16, 12), dpi=80)
 plt.show()
 ```
 
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/education.png" alt="Raw Data header">
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/education.png" width="2500" height="3000" alt="education distribution">
 
 The majority of the people surveyed have a high school education, followed by postgraduates (Honours) and then undergraduates and MSc/PhD holders, in that order.
 
