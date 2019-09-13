@@ -48,7 +48,7 @@ raw = pd.read_csv(dataset, sep=',')
 raw.head()
 ```
 ## Data inspection
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/absenteeism_columns.png" width="2500" height="2300" alt="Dataframe columns">
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/absenteeism_columns.png" width="2500" height="3000" alt="Dataframe columns">
 
 From the file header we see the columns from left to right and data they contain in each row.
 
@@ -158,7 +158,7 @@ At this point, we have repositioned the reasons for absence at the begining of t
 
 ## The Date Column
 
-
+After
 
 
 
