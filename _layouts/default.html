@@ -12,7 +12,12 @@
   <head>
     {% include head.html %}
     {% include head/custom.html %}
-  </head>
+    <style>
+    h1 {
+      color: white;
+      text-shadow: 2px 2px 4px #000000;}
+</style>
+</head>
 
   <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}">
     {% include_cached skip-links.html %}
