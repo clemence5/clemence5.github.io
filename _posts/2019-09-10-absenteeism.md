@@ -85,7 +85,7 @@ sorted(df['Reason for Absence'])
 ```
 We see that it contains 28 different reasons for absence from work, from 0 to 28, with reason number 20 missing.
 Now, can clearly see that these numbers are categorical nominal data points standing for actual reasons for absence. The numbers are obviously used to make the dataset more legible and less voluminous.
-For our quantitative analysis, we need to understand what these numbers stand for, and rearrange them in a numerically meaningful way for our exercise.
+For our quantitative analysis, we need to understand what these numbers stand for, and rearrange them in a numerically meaningful way for our exercise. 
 One way to do this through **dummy encoding**.
 
 ### Dummy Encoding
