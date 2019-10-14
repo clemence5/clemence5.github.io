@@ -1,7 +1,7 @@
 ---
 title: "Absenteeism in the Workplace: Building a model to predict absenteeism"
 date: 2019-10-12
-tags: [Logistic regression, Logit, Classification]
+tags: [Logistic Regression Classification]
 excerpt: "Machine Learning, Absenteeism, Business, Data Science"
 header:
   overlay_image: "/images/absenteeism/out-office-760.jpg"
@@ -21,13 +21,13 @@ In the [previous article](https://clemence5.github.io/absenteeism/) we **preproc
 
 * Dropping the `ID` column (it contained no useful information for our upcoming analysis)
 * Performed some exploratory analysis on the `Reason for absence` column, which contained integers describing the reasons for absenteeism. We performed `dummy encoding` and grouped the dummy variables into 4 classes:
- * various diseases
- * pregnancy-related reasons
- * poisoning
- * light reasons
+    * Various diseases
+    * Pregnancy-related reasons
+    * Poisoning
+    * Light reasons
  and replaced the original column with four dummy-encoded reasons columns
 * Split the date column into month and weekday columns
-* Grouped the education column into two classes representing High School and Tertiary-level graduates respectively.
+* Grouping the education column into two classes representing High School and Tertiary-level graduates respectively.
 * Finally, we saved our preprocessed dataset as `absenteeism_data_preprocessed.csv` in our working directory.
 
 ### So, What's next?
@@ -188,17 +188,7 @@ raw.sample(5)
 
 ## The `Absenteeism Time in Hours` column
 
-This is our target column, the variable we would like to predict.
-
-Let's have a look at it
-
-We would like to predict whether or not absenteeism occurs given our predictors.
-
-Thus, we can transform this column
-into a classification containing binary values: `True` if absent and `False` if not absent.
-
-How do we achieve that?
-
+This is our target column, the variable we will use to predict whether or not absenteeism occurs given our predictors.
 
 ```python
 print('\033[1m' + 'Basic Stats' + '\033[0m')
@@ -206,11 +196,7 @@ abstimestats = raw['Absenteeism Time in Hours'].describe()
 abstimestats
 ```
 
-    [1mBasic Stats[0m
-
-
-
-
+**Basic Stats**    
 
     count    700.000000
     mean       6.761429
@@ -223,17 +209,18 @@ abstimestats
     Name: Absenteeism Time in Hours, dtype: float64
 
 
-
 ## Creating our targets
 
-Let's create our targets for the regression.
-We would like to have a binary classification telling us whethere or not an employee is excessively absent.
+Let's create our targets for the logistic regression.
+We would like to have a binary classification telling us whether or not an employee is excessively absent.
+Thus, we can transform this column
+into a classification containing binary values: `True` if absent and `False` if not absent.
 
 One way to achieve this is by mapping all values above a certain threshold amount of Absenteeism hours to 1 and the rest to 0.
 
 The median can be used as our threshold as it automatically balances our data into 2 roughly equal classes
 
-![perfectly_balanced](attachment:image.png)
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/perfectly_balanced.jpg" width="2000" height="1600" alt="Perfectly balanced">
 
 
 ```python
@@ -254,8 +241,6 @@ print('%5.2f%% of the targets are excessively absent. \nA 60/40 split\
 Targs = pd.DataFrame(data=targets, columns=['Excessive Absenteeism'])
 Targs.sample(6)
 ```
-
-
 
 
 <div>
@@ -320,15 +305,13 @@ plt.show()
 
 ```
 
-
-![png](output_11_0.png)
-
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/output_11_0.png" width="2000" height="1600" alt="Excessive absenteeism countplot">
 
 Thus, using logistic regression, we will classify employees into 2 categories:
 
 **class 1:** Excessively absent $\leq median \leq$ **class 2:** moderately to non-absconding.
 
-i.e We've decided that taking more than 3 hours off work is classified as excessive absenteeism, for our purposes...
+i.e We've decided to classify an instance where more than 3 hours are taken off work as excessive absenteeism.
 
 
 ```python
