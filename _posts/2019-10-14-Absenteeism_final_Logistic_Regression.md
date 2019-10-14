@@ -1,18 +1,5 @@
 
----
-title: "Absenteeism in the Workplace: Building a model to predict absenteeism"
-date: 2019-10-12
-tags: [Logistic regression, Logit, Classification]
-excerpt: "Machine Learning, Absenteeism, Business, Data Science"
-header:
-  overlay_image: "/images/absenteeism/out-office-760.jpg"
-  overlay_filter: 0.5
-  caption: "Credit: [smallbusiness.co.uk](https://s17026.pcdn.co/wp-content/uploads/sites/9/2017/06/Out-of-office-8617.jpeg)"
-  actions:
-    - label: "View on Google Colab"
-      url: "https://colab.research.google.com/drive/1RHBq5TXhqnvfiTRf1ScozQD0wLAN0xf2#scrollTo=kuW_zRfeQ-t5"
-mathjax: true
----
+
 
 ### Summary of current progress:
 
