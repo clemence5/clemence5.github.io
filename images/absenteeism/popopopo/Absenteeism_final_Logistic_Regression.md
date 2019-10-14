@@ -1,53 +1,46 @@
----
-title: "Absenteeism in the Workplace: Building a model to predict absenteeism"
-date: 2019-10-12
-tags: [Logistic Regression Classification]
-excerpt: "Machine Learning, Absenteeism, Business, Data Science"
-header:
-  overlay_image: "/images/absenteeism/out-office-760.jpg"
-  overlay_filter: 0.5
-  caption: "Credit: [smallbusiness.co.uk](https://s17026.pcdn.co/wp-content/uploads/sites/9/2017/06/Out-of-office-8617.jpeg)"
-  actions:
-    - label: "View on Google Colab"
-      url: "https://colab.research.google.com/drive/1RHBq5TXhqnvfiTRf1ScozQD0wLAN0xf2#scrollTo=kuW_zRfeQ-t5"
-mathjax: true
----
 
-
-
+# Recap
 ### Summary of current progress:
 
-In the [previous article](https://clemence5.github.io/absenteeism/) we **preprocessed** our absenteeism dataset by performing the following steps:
+In the previous article we **preprocessed** our absenteeism dataset by performing the following steps:
 
 * Dropping the `ID` column (it contained no useful information for our upcoming analysis)
-* Performed some exploratory analysis on the `Reason for absence` column, which contained integers describing the reasons for absenteeism. We performed `dummy encoding` and grouped the dummy variables into 4 classes:
-    * Various diseases
-    * Pregnancy-related reasons
-    * Poisoning
-    * Light reasons
+* Performed some exploratory analysis on the `Reason for absence` column, which contained integers describing the reasons for absenteeism. We performed `dummy encoding` and grouped the dummy variables into 4 classes: 
+ * various diseases
+ * pregnancy-related reasons
+ * poisoning
+ * light reasons
  and replaced the original column with four dummy-encoded reasons columns
 * Split the date column into month and weekday columns
-* Grouping the education column into two classes representing High School and Tertiary-level graduates respectively.
+* Grouped the education column into two classes representing High School and Tertiary-level graduates respectively.
 * Finally, we saved our preprocessed dataset as `absenteeism_data_preprocessed.csv` in our working directory.
 
 ### So, What's next?
 
-Now, we would like to use our preprocessed data to build a `logistic regression classifier`, or `Logit model`, to help us predict whether or not a given employee will exhibit *excessive absenteeism*, based on information encoded in the predictors we preprocessed.
+Now, we would like to use our preprocessed data to build a regression model to help us predict whether or not absenteeism will occur given the inputs.
 
-Let us begin by importing the usual libraries, loading and taking a preliminary look at our preprocessed data:
+Specifically, we wish to build a logistic regression model
+
+# Creating a logistic regression to predict absenteeism
+
+We begin, again by mounting Google Drive so we can access our preprocessed data 
+
 
 ```python
+
 import pandas as pd
+import pandas_profiling
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set('notebook')
-from IPython.display import display, Image, SVG, Math
+
+from IPython.display import display, Image, SVG, Math, YouTubeVideo
 
 %matplotlib inline
 
-dataset ='absenteeism_data_preprocessed.csv'
-raw = pd.read_csv(dataset)
+dataset ='preprocessed_absenteeism_data.csv'
+raw = pd.read_csv(dataset) 
 raw.sample(5)
 ```
 
@@ -188,7 +181,17 @@ raw.sample(5)
 
 ## The `Absenteeism Time in Hours` column
 
-This is our target column, the variable we will use to predict whether or not absenteeism occurs given our predictors.
+This is our target column, the variable we would like to predict.
+
+Let's have a look at it
+
+We would like to predict whether or not absenteeism occurs given our predictors. 
+
+Thus, we can transform this column
+into a classification containing binary values: `True` if absent and `False` if not absent.
+
+How do we achieve that? 
+
 
 ```python
 print('\033[1m' + 'Basic Stats' + '\033[0m')
@@ -196,7 +199,11 @@ abstimestats = raw['Absenteeism Time in Hours'].describe()
 abstimestats
 ```
 
-**Basic Stats**    
+    [1mBasic Stats[0m
+
+
+
+
 
     count    700.000000
     mean       6.761429
@@ -209,22 +216,21 @@ abstimestats
     Name: Absenteeism Time in Hours, dtype: float64
 
 
+
 ## Creating our targets
 
-Let's create our targets for the logistic regression.
-We would like to have a binary classification telling us whether or not an employee is excessively absent.
-Thus, we can transform this column
-into a classification containing binary values: `True` if absent and `False` if not absent.
+Let's create our targets for the regression.
+We would like to have a binary classification telling us whethere or not an employee is excessively absent.
 
 One way to achieve this is by mapping all values above a certain threshold amount of Absenteeism hours to 1 and the rest to 0.
 
 The median can be used as our threshold as it automatically balances our data into 2 roughly equal classes
 
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/perfectly_balanced.jpg" width="1800" height="1000" alt="Perfectly balanced">
+![perfectly_balanced](attachment:image.png)
 
 
 ```python
-med = abstimestats['50%'] # median = 50 percentile!
+med = abstimestats['50%'] # median = 50 percentile! 
 print('The median is %d'%med)
 targets = np.where(raw['Absenteeism Time in Hours']>med, 1, 0)
 print('%5.2f%% of the targets are excessively absent. \nA 60/40 split\
@@ -232,7 +238,7 @@ print('%5.2f%% of the targets are excessively absent. \nA 60/40 split\
 ```
 
     The median is 3
-    45.57% of the targets are excessively absent.
+    45.57% of the targets are excessively absent. 
     A 60/40 split still counts as balanced!
 
 
@@ -241,6 +247,8 @@ print('%5.2f%% of the targets are excessively absent. \nA 60/40 split\
 Targs = pd.DataFrame(data=targets, columns=['Excessive Absenteeism'])
 Targs.sample(6)
 ```
+
+
 
 
 <div>
@@ -299,19 +307,21 @@ Targs.sample(6)
 ```python
 plt.rcParams['figure.figsize'] = (14.0, 8.0)
 plt.xlabel('Absenteeism in Hours')
-sns.countplot(raw['Absenteeism Time in Hours'],
+sns.countplot(raw['Absenteeism Time in Hours'], 
               hue=Targs['Excessive Absenteeism'].map({0:'Moderate', 1:'Excessive'}))
 plt.show()
 
 ```
 
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/output_11_0.png" width="1800" height="1200" alt="Excessive absenteeism countplot">
+
+![png](output_11_0.png)
+
 
 Thus, using logistic regression, we will classify employees into 2 categories:
 
-**class 1:** Excessively absent $$\le median \le$$ **class 2:** moderately to non-absconding.
+**class 1:** Excessively absent $\leq median \leq$ **class 2:** moderately to non-absconding.
 
-i.e We've decided to classify an instance where more than 3 hours are taken off work as excessive absenteeism.
+i.e We've decided that taking more than 3 hours off work is classified as excessive absenteeism, for our purposes...
 
 
 ```python
@@ -323,7 +333,9 @@ plt.title('Excessive Absenteeism in the workplace', fontweight='bold')
 plt.show()
 ```
 
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/output_13_0.png" width="1800" height="1200" alt="Excessive absenteeism classes pie chart">
+
+![png](output_13_0.png)
+
 
 ### Selecting the inputs for regression:
 
@@ -333,7 +345,7 @@ plt.show()
 raw_inputs = raw.drop(['Absenteeism Time in Hours'], axis=1)
 ```
 
-we could alternatively use `iloc` to slice the dataFrame, like so:
+we could alternatively use `iloc` to slice the dataFrame, like so: 
 
 `raw_inputs = df.iloc[:,:-1]`
 
@@ -359,42 +371,42 @@ X_train, X_test, y_train, y_test = train_test_split(raw_inputs, Targs, test_size
 ## Standardizing the data:
 
 ### Why do we need to standardize our data?
-Standardizing allows us to use one distribution (the [Normal distribution](https://en.wikipedia.org/wiki/Normal_distribution)) when comparing data with different units, ranges or other attributes (i.e [multivariate data](https://www.youtube.com/watch?v=uAxyI_XfqXk)). It also ensures that the data and results inferred therefrom are comparable with other datasets. Standardization works when the (random) variable, X is normally (N) distributed with mean $$\mu$$ and a variance of $$\sigma^{2}$$:
+Standardizing allows us to use one distribution (the [Normal distribution](https://en.wikipedia.org/wiki/Normal_distribution)) when comparing data with different units, ranges or other attributes (i.e [multivariate data](https://www.youtube.com/watch?v=uAxyI_XfqXk)). It also ensures that the data and results inferred therefrom are comparable with other datasets. Standardization works when the (random) variable, X is normally (N) distributed with mean $\mu$ and a variance of $\sigma^{2}$:
 $$ X \sim N(\mu, \sigma^{2})$$
 
-The result of standardizing X is a zero-mean ($$\mu = 0$$) data-set with a standard deviation of 1 ($$\sigma =1$$).
+The result of standardizing X is a zero-mean ($\mu = 0$) data-set with a standard deviation of 1 ($\sigma =1$). 
 ![towardsdatascience](https://miro.medium.com/max/992/1*dZlwWGNhFco5bmpfwYyLCQ.png)
 
 
 
-Each observation's standardized score $$z_{i} = \frac{x_{i} - \mu}{\sigma}$$ (a.k.a z-score) tells us, based on the sign of $$z (\pm)$$, if the datapoint is below or above the mean, while the magnitude of $$z$$ tells us by how much.  
+Each observation's standardized score $z_{i} = \frac{x_{i} - \mu}{\sigma}$ (a.k.a z-score) tells us, based on the sign of $z (\pm)$, if the datapoint is below or above the mean, while the magnitude of $z$ tells us by how much.  
 
 ![365datascience](https://365datascience.com/wp-content/uploads/2018/10/image3-9-768x381.jpg)
 
 
-The above two points basically allow us to easily say how far from the *norm* a single observation is, i.e: whether it's 1 $$\sigma$$ (read 1 sigma, when z=1) or 3 $$\sigma$$ (z=3), etc. above or below the mean, ultimately allowing us to use a single model to evaluate the likelihood of any observation.
+The above two points basically allow us to easily say how far from the *norm* a single observation is, i.e: whether it's 1 $\sigma$ (read 1 sigma, when z=1) or 3 $\sigma$ (z=3), etc. above or below the mean, ultimately allowing us to use a single model to evaluate the likelihood of any observation. 
 
 Neglecting to standardize our data can have the effect of skewing the results of a ML algorithm towards, say, a feature with a large range but very litte importance to the model in reality!
 
 
----
+--- 
 
 
-##### To Standardize or not to standardize?
+##### To Standardize or not to standardize? 
 
 ![Shakespeare](https://scontent.fcpt7-1.fna.fbcdn.net/v/t1.0-9/15781102_397717563911228_4739751435994228788_n.jpg?_nc_cat=101&_nc_oc=AQm4dMS-0_4xYEZam7-F1oiJ-51WPcUb4jbXXhTSFEsJlBC3l1M8WtL6BVXLdvcqmSw&_nc_ht=scontent.fcpt7-1.fna&oh=f7a016b48336f6f601aca2efedebf4dc&oe=5E35E409)
 
 
-In the context of ML Engineering, standardization helps with model accuracy: statisticians, BI analysts and other businessfolk on the other hand prioritise model interpretability since they are more concerned with the driving forces behind the phenomena covered by our models, and thus will often opt for no standardization.
+In the context of ML Engineering, standardization helps with model accuracy; statisticians, BI analysts and other businessfolk on the other hand prioritise model interpretability since they are more concerned with the driving forces behind the phenomena covered by our models, and thus will often opt for no standardization.
 
-The decision to standardize or not to standardize ultimately depends on the data scientist/analyst, informed by their ultimate requirements with the data. Some machine learning algorithms' solvers also penalise unscaled data, thus in the interest of accuracy, one may opt to either standardize or create analyses covering both scenarios, which would be simplified by the use of a [pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html).
+The decision to standardize or not to standardize ultimately depends on the data scientist/analyst, informed by their ultimate requirements with the data. Some machine learning algorithms' solvers also penalise unscaled data, thus in the interest of accuracy, one may opt to either standardize or create analyses covering both scenarios, which would be simplified by the use of a [pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html). 
+ 
 
-
----
+--- 
 
 This topic could be an entire post on its own, but this is the gist of it.
 
-**TLDR:** Standardization tells us the average spread of the observations from the mean of the feature, and it is useful for comparing different features and datasets. In short: 🍏🍊 $$\underrightarrow{\mbox{standardization}}$$ 🍎🍏.
+**TLDR:** Standardization tells us the average spread of the observations from the mean of the feature, and it is useful for comparing different features and datasets. In short: 🍏🍊 $\underrightarrow{\mbox{standardization}}$ 🍎🍏.
 
 
 For further browsing, try [This Quora question and answers](https://www.quora.com/Why-is-it-useful-to-standardize-a-variable), [This Humans of data article](https://humansofdata.atlan.com/2018/12/data-standardization/) and [One of a ton of Medium articles on the topic](https://medium.com/@joelvarmadirisam/my-take-on-why-do-we-need-to-standardize-the-data-1459e6608a63).
@@ -435,10 +447,15 @@ X_train_scaled.head()
 ```
 
     Standardize all inputs except:
-     ['Reason_1', 'Reason_2', 'Reason_3', 'Reason_4', 'Education']
+     ['Reason_1', 'Reason_2', 'Reason_3', 'Reason_4', 'Education'] 
+    
+    
+    [1m
+    Our Predictors, after scaling:
+    [0m
 
 
-    *Our Predictors, after scaling:*
+
 
 
 <div>
@@ -603,15 +620,15 @@ Let's see what our model's predictions are, by running `model.predict` on our `h
 
 **NB:** Let's not forget to standardize our test set first!
 
-**NB:** We fit our scaler on the training set only, to teach our model
-the training set's $$\mu$$ and $$\sigma$$: $$X\_train\_scaled = \frac{X_{i}- \mu_{train}}{\sigma_{train}}$$.
+**Ps:** We fit our scaler on the training set only, to teach our model 
+the training set's $\mu$ and $\sigma$: $$X\_train\_scaled = \frac{X_{i}- \mu_{train}}{\sigma_{train}}$$.
 The `.fit_transform` method immediately transforms (scales) our training set after fitting.
 `X_train_scaled = scaler.fit_transform(X_train)`.
 Learning MUST only take place within the training set.
 
-After the model has learned the values of $$\mu$$ and $$\sigma$$ from the training set, we use the fitted model to transform the holdout set using: $$X\_test\_scaled = \frac{X_{i}- \mu_{train}}{\sigma_{train}}$$
+After the model has learned the values of $\mu$ and $\sigma$ from the training set, we use the fitted model to transform the holdout set using: $$X\_test\_scaled = \frac{X_{i}- \mu_{train}}{\sigma_{train}}$$
 
-or `X_test_scaled = scaler.transform(X_test)`
+or `X_test_scaled = scaler.transform(X_test)` 
 
 for each column.
 
@@ -683,23 +700,23 @@ y_pred.sample(5)
 
 The model accuracy is calculated by comparing the predictions in `y_pred` with the `holdout` target column.
 
-Let's see how our model performs on the training and testing predictors respectively. A good model doesn't do significantly worse on the test set, if it does, we've overfit.
+Let's see how our model performs on the training and testing predictors respectively. A good model doesn't do significantly worse on the test set, if it does, we've overfit. 
 
 The inverse, though, doesn't make much sense. However, a marginal 'improvement' in accuracy is possible due to randomness.
 
 
 
 ```python
-print('\033[1m'+'Train Accuracy:'+'\033[0m', logreg.score(X_train_scaled, y_train)) # Train score
-print('\033[1m'+'Test Accuracy:'+'\033[0m', logreg.score(X_test_scaled, y_test)) # Train score
+print('\033[1m'+'Train Accuracy:'+'\033[0m', logreg.score(X_train_scaled, y_train)) # Train score 
+print('\033[1m'+'Test Accuracy:'+'\033[0m', logreg.score(X_test_scaled, y_test)) # Train score 
 # Let's Manually calculate the test accuracy....
 manual_test_accuracy = (sum(y_pred.to_numpy()==y_test.to_numpy())/np.shape(y_pred.to_numpy()))[0]
 print('\033[1m'+'Manual Test Accuracy:'+'\033[0m', manual_test_accuracy)
 ```
 
-    [**Train Accuracy:** 0.7589285714285714
-    [**Test Accuracy:** 0.7642857142857142
-    [**Manual Test Accuracy:** 0.7642857142857142
+    [1mTrain Accuracy:[0m 0.7589285714285714
+    [1mTest Accuracy:[0m 0.7642857142857142
+    [1mManual Test Accuracy:[0m 0.7642857142857142
 
 
 ## The Weights and Bias
@@ -708,11 +725,11 @@ The objective of Regression analysis is to determine the weights (coefficients) 
 
 $$ \gamma = \beta_{0} + \beta_{1}x_{1} + \beta_{2}x_{2} + ... + \beta_{n}x_{n} + \epsilon $$
 
-where $$\gamma$$ is the predicted output
+where $ \gamma$ is the predicted output
 
-$$\beta_{0}$$ is the bias (intercept in math)
+$\beta_{0}$ is the bias (intercept in math)
 
-$$\beta_{k}, 1 \leq k \leq n$$ are the weights
+$\beta_{k}, 1 \leq k \leq n$ are the weights
 
 
 
@@ -766,7 +783,7 @@ summary_table['Weight'] = np.transpose(logreg.coef_) # Convert the coefficients 
 #display(summary_table)
 
 # To add the intercept to the beginning of the summary table:
-summary_table.index +=1 # shift the indices down by one
+summary_table.index +=1 # shift the indices down by one 
 #display(summary_table) # Space has been created for the intercept to be prepended
 summary_table.loc[0] = ['Bias', logreg.intercept_[0]]
 summary_table = summary_table.sort_index()
@@ -776,6 +793,8 @@ summary_table['importance'] = [(100*abs(1-abs(i))/(abs(1-abs(summary_table.Odds_
 summary_table.sort_values('importance', ascending=False)
 
 ```
+
+
 
 
 <div>
@@ -915,22 +934,22 @@ summary_table.sort_values('importance', ascending=False)
 
 
 Now we have our coefficients sorted from most to least important.
-A weight $$\beta_{k}$$ of zero (or close to 0) $$\implies$$ the feature will not impact the model by much.
+A weight $\beta_{k}$ of zero (or close to 0) $\implies$ the feature will not impact the model by much.
 Conversely, a larger weight means that the model depends more heavily on that feature. This is intuitive.
 
 The odds ratio on the other hand:
 $$
 Odds \times odds\_ratio = \mbox{new odds}
 $$
-i.e if odds are 3:1
+i.e if odds are 3:1 
 
-and $$ odds\_ratio  = 2$$
+and $ odds\_ratio  = 2$ 
 
 then new odds = 6:1
 
 for a unit change (change of 1)
 
-If odds_ratio = 1, odds = new odds.
+If odds_ratio = 1, odds = new odds. 
 
 Thus, the closer a predictor's odds_ratio is to 1, the lower its significance to the model.
 We would like to know how important each of our predictors are to the model and its predictions. The weights / Odds ratio offer a crude way of evaluating this. However, for a quick ranking of the predictors, I included an arbitrarily defined *importance* column, with no meaning beyond being a ranking aid. In this column, the importance by the absolute value of each feature's difference with 1, displayed as a percentage of the highest-importance predictor.
@@ -940,9 +959,9 @@ Feature Importance provides a much more straightforward and less fluffy way of a
 # Feature Importance
 
 The Permutation Importance of a feature is calculated randomly shuffling the feature's rows and checking how much the model's prediction accuracy on the hold out set deteriorates as a result. This is done for each feature without changing any of the other columns. This shuffling and model performance evaluation (by calculating how much the loss function suffers per shuffle) is performed multiple times for each feature, to account for randomness.
-The final value reported is the average importance weight $$\pm$$ the standard deviation, or the range of variation of the importance weights each time the shuffling is performed.
+The final value reported is the average importance weight $\pm$ the standard deviation, or the range of variation of the importance weights each time the shuffling is performed. 
 
-Now, shuffling a predictor's rows should result in less accurate model predictions, for obvious reasons.
+Now, shuffling a predictor's rows should result in less accurate model predictions, for obvious reasons. 
 Thus, the feature importances are calculated by how negatively shuffling them affects the model.
 
 `eli5` does this very thing in no more than 4 lines of code!
@@ -950,7 +969,6 @@ Thus, the feature importances are calculated by how negatively shuffling them af
 
 
 ```python
-!pip install eli5
 import eli5
 from eli5.sklearn import PermutationImportance
 perm = PermutationImportance(logreg, random_state=0).fit(X_train_scaled, y_train)
@@ -962,196 +980,255 @@ eli5.show_weights(perm, feature_names=X_train_scaled.columns.tolist())
 
 
 
+    <style>
+    table.eli5-weights tr:hover {
+        filter: brightness(85%);
+    }
+</style>
 
 
 
-<table class="eli5-weights eli5-feature-importances" style="border-collapse: collapse; border: none; margin-top: 0em; table-layout: auto;">
-<thead>
-<tr style="border: none;">
-  <th style="padding: 0 1em 0 0.5em; text-align: right; border: none;">Weight</th>
-  <th style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">Feature</th>
-</tr>
-</thead>
-<tbody>
+    
 
-  <tr style="background-color: hsl(120, 100.00%, 80.00%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.1446
+    
 
-              &plusmn; 0.0168
+    
 
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Reason_1
-      </td>
-  </tr>
+    
 
-  <tr style="background-color: hsl(120, 100.00%, 87.12%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0771
+    
 
-              &plusmn; 0.0167
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Reason_3
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(120, 100.00%, 90.59%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0493
-
-              &plusmn; 0.0080
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Transportation Expense
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(120, 100.00%, 92.12%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0382
-
-              &plusmn; 0.0062
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Children
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(120, 100.00%, 94.99%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0200
-
-              &plusmn; 0.0142
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Reason_4
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(120, 100.00%, 96.25%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0132
-
-              &plusmn; 0.0105
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Pets
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(120, 100.00%, 97.31%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0082
-
-              &plusmn; 0.0048
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Age
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(120, 100.00%, 98.83%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0025
-
-              &plusmn; 0.0062
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Education
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(120, 100.00%, 99.08%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0018
-
-              &plusmn; 0.0078
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Daily Work Load Average
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(120, 100.00%, 99.08%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          0.0018
-
-              &plusmn; 0.0023
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Reason_2
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(0, 100.00%, 99.51%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          -0.0007
-
-              &plusmn; 0.0017
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Month Value
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(0, 100.00%, 99.51%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          -0.0007
-
-              &plusmn; 0.0129
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Day of the Week
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(0, 100.00%, 99.35%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          -0.0011
-
-              &plusmn; 0.0066
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Distance to Work
-      </td>
-  </tr>
-
-  <tr style="background-color: hsl(0, 100.00%, 98.72%); border: none;">
-      <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
-          -0.0029
-
-              &plusmn; 0.0161
-
-      </td>
-      <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
-          Body Mass Index
-      </td>
-  </tr>
+    
 
 
-</tbody>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+
+    
+
+    
+
+    
+
+    
+        <table class="eli5-weights eli5-feature-importances" style="border-collapse: collapse; border: none; margin-top: 0em; table-layout: auto;">
+    <thead>
+    <tr style="border: none;">
+        <th style="padding: 0 1em 0 0.5em; text-align: right; border: none;">Weight</th>
+        <th style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">Feature</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr style="background-color: hsl(120, 100.00%, 80.00%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.1446
+                
+                    &plusmn; 0.0168
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Reason_1
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 87.12%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0771
+                
+                    &plusmn; 0.0167
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Reason_3
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 90.59%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0493
+                
+                    &plusmn; 0.0080
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Transportation Expense
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 92.12%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0382
+                
+                    &plusmn; 0.0062
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Children
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 94.99%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0200
+                
+                    &plusmn; 0.0142
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Reason_4
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 96.25%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0132
+                
+                    &plusmn; 0.0105
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Pets
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 97.31%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0082
+                
+                    &plusmn; 0.0048
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Age
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 98.83%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0025
+                
+                    &plusmn; 0.0062
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Education
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 99.08%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0018
+                
+                    &plusmn; 0.0078
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Daily Work Load Average
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(120, 100.00%, 99.08%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                0.0018
+                
+                    &plusmn; 0.0023
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Reason_2
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(0, 100.00%, 99.51%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                -0.0007
+                
+                    &plusmn; 0.0017
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Month Value
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(0, 100.00%, 99.51%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                -0.0007
+                
+                    &plusmn; 0.0129
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Day of the Week
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(0, 100.00%, 99.35%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                -0.0011
+                
+                    &plusmn; 0.0066
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Distance to Work
+            </td>
+        </tr>
+    
+        <tr style="background-color: hsl(0, 100.00%, 98.72%); border: none;">
+            <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                -0.0029
+                
+                    &plusmn; 0.0161
+                
+            </td>
+            <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                Body Mass Index
+            </td>
+        </tr>
+    
+    
+    </tbody>
 </table>
+    
+
+    
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+
 
 
 
 
 ### Interpretation:
 
-Permutation importances are displayed in descending order.
+Permutation importances are displayed in descending order. 
 
 The weights are reported with an uncertainty denoting how much the base weight varied per shuffle.
 
@@ -1167,15 +1244,16 @@ Anyway, we see, from our permutation importances, that Reasons 1 and 3, followed
 
 
 
- is where we simplify our model by removing the low-importance features (with weights $$\approx 0$$ or odds ratio $$\approx 1$$)
+ is where we simplify our model by removing the low-importance features (with weights $\approx 0$ or odds ratio $\approx 1$)
 
 
 
-The `Day of the Week`, `Distance to work`, `Body Mass Index` and `Month` appear to be three such features, according to the Permutation Importance Table.
+The `Day of the Week`, `Distance to work`, `Body Mass Index` and `Month` appear to be three such features, according to the Permutation Importance Table. 
 
----
+--- 
 
 Let's re-train our model without these features and see if a simplified model performs any better.
+
 
 
 ```python
@@ -1228,7 +1306,7 @@ summary_table2['New Weight'] = np.transpose(logreg_new.coef_) # Convert the coef
 
 
 # To add the intercept to the beginning of the summary table:
-summary_table2.index +=1 # shift the indices down by one
+summary_table2.index +=1 # shift the indices down by one 
 # display(summary_table2) # Space has been created for the intercept to be prepended
 summary_table2.loc[0] = ['New Bias', logreg_new.intercept_[0]]
 summary_table2 = summary_table2.sort_index()
@@ -1240,7 +1318,7 @@ from IPython.display import display, HTML
 
 
 # credit: https://stackoverflow.com/questions/38783027/jupyter-notebook-display-two-pandas-tables-side-by-side
-display_side_by_side(summary_table.sort_values('importance', ascending=False),
+display_side_by_side(summary_table.sort_values('importance', ascending=False), 
                      summary_table2.sort_values('New importance', ascending=False))
 
 print('\n------------------------------------------------------------------------------------------------------\n')
@@ -1475,13 +1553,13 @@ plt.show()
 </table style="display:inline">
 
 
+    
+    ------------------------------------------------------------------------------------------------------
+    
 
-    -----------------------------------------------------------------------------------------------
 
 
-
-
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/output_43_2.png" width="2000" height="1600" alt="Feature Importances after feature selection">
+![png](output_43_2.png)
 
 
 
@@ -1492,7 +1570,7 @@ trsc_new = 100*logreg_new.score(X_tr_scaled, y_tr)
 tsst_new = 100*logreg_new.score(X_te_scaled, y_te)
 print('\033[1m'+'New Accuracies:'+'\033[0m'+'\nTrain Accuracy= %.2f%%\t Test Accuracy = %5.3f%%' %(trsc_new, trsc_new))
 print('\033[1m'+'Old Accuracies:'+'\033[0m'+'\nTrain Accuracy= %.2f%%\t Test Accuracy = %5.3f%%\
-      \n -------------------------------------------------------\n' %(trsc, tsst))
+      \n --------------------------------------------------------------\n' %(trsc, tsst))
 
 score_table = pd.DataFrame(data=[trsc, tsst], columns=['old score'])
 score_table['new score'] = [trsc_new, tsst_new]
@@ -1500,11 +1578,12 @@ score_table.index = ['train accuracy', 'test accuracy']
 score_table
 ```
 
-    **New Accuracies:**
+    [1mNew Accuracies:[0m
     Train Accuracy= 74.64%	 Test Accuracy = 74.643%
-    **Old Accuracies:**
+    [1mOld Accuracies:[0m
     Train Accuracy= 75.89%	 Test Accuracy = 76.429%      
      --------------------------------------------------------------
+    
 
 
 
