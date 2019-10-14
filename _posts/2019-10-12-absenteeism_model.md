@@ -1214,357 +1214,374 @@ logreg_new.fit(X_tr_scaled, y_tr.to_numpy().ravel())
 
 
 
-```python
-from IPython.display import display_html
-def display_side_by_side(*args):
-    html_str=''
-    for df in args:
-        html_str+=df.to_html()
-    display_html(html_str.replace('table','table style="display:inline"'),raw=True)
-
-# Summary Table COmparison
-summary_table2 = pd.DataFrame(data=X_tr_scaled.columns.values, columns=['Feature name'])
-summary_table2['New Weight'] = np.transpose(logreg_new.coef_) # Convert the coefficients into columns
 
 
-# To add the intercept to the beginning of the summary table:
-summary_table2.index +=1 # shift the indices down by one
-# display(summary_table2) # Space has been created for the intercept to be prepended
-summary_table2.loc[0] = ['New Bias', logreg_new.intercept_[0]]
-summary_table2 = summary_table2.sort_index()
-summary_table2['New Odds_ratio'] = np.exp(summary_table2['New Weight'])
+              ```python
+
+              # Summary Table COmparison
+              summary_table2 = pd.DataFrame(data=X_tr_scaled.columns.values, columns=['Feature name'])
+              summary_table2['New Weight'] = np.transpose(logreg_new.coef_) # Convert the coefficients into columns
 
 
-summary_table2['New importance'] = [(abs(1-abs(i))/max(abs(1-abs(summary_table2['New Odds_ratio'])))) for i in summary_table2['New Odds_ratio']]
-from IPython.display import display, HTML
+              # To add the intercept to the beginning of the summary table:
+              summary_table2.index +=1 # shift the indices down by one
+              # display(summary_table2) # Space has been created for the intercept to be prepended
+              summary_table2.loc[0] = ['New Bias', logreg_new.intercept_[0]]
+              summary_table2 = summary_table2.sort_index()
+              summary_table2['New Odds_ratio'] = np.exp(summary_table2['New Weight'])
 
 
-# credit: https://stackoverflow.com/questions/38783027/jupyter-notebook-display-two-pandas-tables-side-by-side
-display_side_by_side(summary_table.sort_values('importance', ascending=False),
-                     summary_table2.sort_values('New importance', ascending=False))
-
-print('\n------------------------------------------------------------------------------------------------------\n')
-plt.rcParams['figure.figsize'] = (18.0, 9.0)
-f = plt.figure(figsize=(20,8))
-f.suptitle('Feature Importances pre- and post-Backward elimination', fontweight='bold')
-ax = f.add_subplot(121)
-ax.set_title('All predictors')
-ax.pie(summary_table['Odds_ratio'], labels=summary_table['Feature name'], shadow=True)
-
-ax2 = f.add_subplot(122)
-ax2.set_title('Important predictors')
-ax2.pie(summary_table2['New Odds_ratio'], labels=summary_table2['Feature name'], shadow=True)
-plt.show()
-
-```
+              summary_table2['New importance'] = [(abs(1-abs(i))/max(abs(1-abs(summary_table2['New Odds_ratio'])))) for i in summary_table2['New Odds_ratio']]
 
 
-<table style="display:inline" border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Feature name</th>
-      <th>Weight</th>
-      <th>Odds_ratio</th>
-      <th>importance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>3</th>
-      <td>Reason_3</td>
-      <td>3.090328</td>
-      <td>21.984291</td>
-      <td>100.000000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Reason_1</td>
-      <td>2.671990</td>
-      <td>14.468735</td>
-      <td>64.184847</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Reason_4</td>
-      <td>0.871375</td>
-      <td>2.390194</td>
-      <td>6.624928</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>Transportation Expense</td>
-      <td>0.625222</td>
-      <td>1.868660</td>
-      <td>4.139573</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>Bias</td>
-      <td>-1.703749</td>
-      <td>0.182000</td>
-      <td>3.898155</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>Children</td>
-      <td>0.492207</td>
-      <td>1.635923</td>
-      <td>3.030473</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Reason_2</td>
-      <td>0.460655</td>
-      <td>1.585112</td>
-      <td>2.788334</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>Pets</td>
-      <td>-0.332765</td>
-      <td>0.716938</td>
-      <td>1.348921</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>Body Mass Index</td>
-      <td>0.202860</td>
-      <td>1.224901</td>
-      <td>1.071761</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>Education</td>
-      <td>0.185145</td>
-      <td>1.203393</td>
-      <td>0.969261</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>Day of the Week</td>
-      <td>-0.173952</td>
-      <td>0.840337</td>
-      <td>0.760869</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>Age</td>
-      <td>-0.155437</td>
-      <td>0.856041</td>
-      <td>0.686033</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Month Value</td>
-      <td>0.070289</td>
-      <td>1.072818</td>
-      <td>0.347013</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>Distance to Work</td>
-      <td>0.056338</td>
-      <td>1.057955</td>
-      <td>0.276183</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>Daily Work Load Average</td>
-      <td>0.039379</td>
-      <td>1.040165</td>
-      <td>0.191404</td>
-    </tr>
-  </tbody>
-</table style="display:inline"><table style="display:inline" border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Feature name</th>
-      <th>New Weight</th>
-      <th>New Odds_ratio</th>
-      <th>New importance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>3</th>
-      <td>Reason_3</td>
-      <td>2.961844</td>
-      <td>19.333600</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Reason_1</td>
-      <td>2.637040</td>
-      <td>13.971785</td>
-      <td>0.707542</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Reason_4</td>
-      <td>0.829414</td>
-      <td>2.291976</td>
-      <td>0.070470</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Reason_2</td>
-      <td>0.757981</td>
-      <td>2.133963</td>
-      <td>0.061852</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>New Bias</td>
-      <td>-1.564642</td>
-      <td>0.209163</td>
-      <td>0.043136</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>Transportation Expense</td>
-      <td>0.515215</td>
-      <td>1.673999</td>
-      <td>0.036763</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>Children</td>
-      <td>0.363538</td>
-      <td>1.438410</td>
-      <td>0.023913</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>Pets</td>
-      <td>-0.359347</td>
-      <td>0.698132</td>
-      <td>0.016465</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>Education</td>
-      <td>-0.258105</td>
-      <td>0.772514</td>
-      <td>0.012408</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>Age</td>
-      <td>-0.138842</td>
-      <td>0.870366</td>
-      <td>0.007071</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Month Value</td>
-      <td>0.053033</td>
-      <td>1.054464</td>
-      <td>0.002971</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>Daily Work Load Average</td>
-      <td>-0.050169</td>
-      <td>0.951069</td>
-      <td>0.002669</td>
-    </tr>
-  </tbody>
-</table style="display:inline">
+              from IPython.display import display_html
+              def display_side_by_side(*args):
+                  html_str=''
+                  for df in args:
+                      html_str+=df.to_html()
+                  display_html(html_str.replace('table','table style="display:inline"'),raw=True)
 
+              """
+              # credit: https://stackoverflow.com/questions/38783027/jupyter-notebook-display-two-pandas-tables-side-by-side
+              display_side_by_side(summary_table.sort_values('importance', ascending=False),
+                                   summary_table2.sort_values('New importance', ascending=False))
+              """
 
+              perm = PermutationImportance(logreg, random_state=0).fit(X_train_scaled, y_train)
+              eli5.show_weights(perm, feature_names=X_train_scaled.columns.tolist())
 
-    -----------------------------------------------------------------------------------------------
+              perm2 = PermutationImportance(logreg_new, random_state=0).fit(X_tr_scaled, y_tr)
+              eli5.show_weights(perm2, feature_names=X_tr.columns.tolist())
 
-
-
-
-<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/output_43_2.png" width="2000" height="1600" alt="Feature Importances after feature selection">
-
-
-
-```python
-trsc = 100*logreg.score(X_train_scaled, y_train)
-tsst = 100*logreg.score(X_test_scaled, y_test)
-trsc_new = 100*logreg_new.score(X_tr_scaled, y_tr)
-tsst_new = 100*logreg_new.score(X_te_scaled, y_te)
-print('\033[1m'+'New Accuracies:'+'\033[0m'+'\nTrain Accuracy= %.2f%%\t Test Accuracy = %5.3f%%' %(trsc_new, trsc_new))
-print('\033[1m'+'Old Accuracies:'+'\033[0m'+'\nTrain Accuracy= %.2f%%\t Test Accuracy = %5.3f%%\
-      \n -------------------------------------------------------\n' %(trsc, tsst))
-
-score_table = pd.DataFrame(data=[trsc, tsst], columns=['old score'])
-score_table['new score'] = [trsc_new, tsst_new]
-score_table.index = ['train accuracy', 'test accuracy']
-score_table
-```
-
-    **New Accuracies:**
-    Train Accuracy= 74.64%	 Test Accuracy = 74.643%
-    **Old Accuracies:**
-    Train Accuracy= 75.89%	 Test Accuracy = 76.429%      
-     --------------------------------------------------------------
+              ```
 
 
 
 
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>old score</th>
-      <th>new score</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>train accuracy</th>
-      <td>75.892857</td>
-      <td>74.642857</td>
-    </tr>
-    <tr>
-      <th>test accuracy</th>
-      <td>76.428571</td>
-      <td>77.142857</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+                  <style>
+                  table.eli5-weights tr:hover {
+                      filter: brightness(85%);
+                  }
+              </style>
 
 
 
-# Saving the model
-
-Let's save our final model as a pickle file
 
 
-```python
-import pickle
-
-with open('model', 'wb') as file:
-    pickle.dump(logreg_new, file)
-```
-
-Let's also save the scaler we used to standardize our data!
 
 
-```python
-with open('scaler', 'wb') as file:
-    pickle.dump(coltransformer, file)
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      <table class="eli5-weights eli5-feature-importances" style="border-collapse: collapse; border: none; margin-top: 0em; table-layout: auto;">
+                  <thead>
+                  <tr style="border: none;">
+                      <th style="padding: 0 1em 0 0.5em; text-align: right; border: none;">Weight</th>
+                      <th style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">Feature</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+
+                      <tr style="background-color: hsl(120, 100.00%, 80.00%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              0.1686
+
+                                  &plusmn; 0.0262
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Reason_1
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(120, 100.00%, 88.43%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              0.0771
+
+                                  &plusmn; 0.0156
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Reason_3
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(120, 100.00%, 94.95%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              0.0236
+
+                                  &plusmn; 0.0069
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Transportation Expense
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(120, 100.00%, 95.12%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              0.0225
+
+                                  &plusmn; 0.0137
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Children
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(120, 100.00%, 97.16%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              0.0104
+
+                                  &plusmn; 0.0089
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Reason_4
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(120, 100.00%, 98.56%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              0.0039
+
+                                  &plusmn; 0.0116
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Pets
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(120, 100.00%, 98.65%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              0.0036
+
+                                  &plusmn; 0.0045
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Reason_2
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(0, 100.00%, 100.00%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              0.0000
+
+                                  &plusmn; 0.0064
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Daily Work Load Average
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(0, 100.00%, 99.73%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              -0.0004
+
+                                  &plusmn; 0.0061
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Month Value
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(0, 100.00%, 99.29%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              -0.0014
+
+                                  &plusmn; 0.0057
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Age
+                          </td>
+                      </tr>
+
+                      <tr style="background-color: hsl(0, 100.00%, 98.47%); border: none;">
+                          <td style="padding: 0 1em 0 0.5em; text-align: right; border: none;">
+                              -0.0043
+
+                                  &plusmn; 0.0029
+
+                          </td>
+                          <td style="padding: 0 0.5em 0 0.5em; text-align: left; border: none;">
+                              Education
+                          </td>
+                      </tr>
+
+
+                  </tbody>
+              </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              ```python
+              print('\n------------------------------------------------------------------------------------------------------\n')
+              plt.rcParams['figure.figsize'] = (18.0, 9.0)
+              f = plt.figure(figsize=(20,8))
+              f.suptitle('Feature Importances pre- and post-Backward elimination', fontweight='bold')
+              ax = f.add_subplot(121)
+              ax.set_title('All predictors')
+              ax.pie(summary_table['Odds_ratio'], labels=summary_table['Feature name'], shadow=True)
+
+              ax2 = f.add_subplot(122)
+              ax2.set_title('Important predictors')
+              ax2.pie(summary_table2['New Odds_ratio'], labels=summary_table2['Feature name'], shadow=True)
+              plt.show()
+
+              ```
+
+
+                  ------------------------------------------------------------------------------------------------------
+
+
+
+
+              ![png](output_44_1.png)
+
+
+
+              ```python
+              trsc = 100*logreg.score(X_train_scaled, y_train)
+              tsst = 100*logreg.score(X_test_scaled, y_test)
+              trsc_new = 100*logreg_new.score(X_tr_scaled, y_tr)
+              tsst_new = 100*logreg_new.score(X_te_scaled, y_te)
+              print('\033[1m'+'New Accuracies:'+'\033[0m'+'\nTrain Accuracy= %.2f%%\t Test Accuracy = %5.3f%%' %(trsc_new, trsc_new))
+              print('\033[1m'+'Old Accuracies:'+'\033[0m'+'\nTrain Accuracy= %.2f%%\t Test Accuracy = %5.3f%%\
+                    \n --------------------------------------------------------------\n' %(trsc, tsst))
+
+              score_table = pd.DataFrame(data=[trsc, tsst], columns=['old score'])
+              score_table['new score'] = [trsc_new, tsst_new]
+              score_table.index = ['train accuracy', 'test accuracy']
+              score_table
+              ```
+
+                  [1mNew Accuracies:[0m
+                  Train Accuracy= 74.64%	 Test Accuracy = 74.643%
+                  [1mOld Accuracies:[0m
+                  Train Accuracy= 75.89%	 Test Accuracy = 76.429%      
+                   --------------------------------------------------------------
+
+
+
+
+
+
+              <div>
+              <style scoped>
+                  .dataframe tbody tr th:only-of-type {
+                      vertical-align: middle;
+                  }
+
+                  .dataframe tbody tr th {
+                      vertical-align: top;
+                  }
+
+                  .dataframe thead th {
+                      text-align: right;
+                  }
+              </style>
+              <table border="1" class="dataframe">
+                <thead>
+                  <tr style="text-align: right;">
+                    <th></th>
+                    <th>old score</th>
+                    <th>new score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>train accuracy</th>
+                    <td>75.892857</td>
+                    <td>74.642857</td>
+                  </tr>
+                  <tr>
+                    <th>test accuracy</th>
+                    <td>76.428571</td>
+                    <td>77.142857</td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+
+
+
+              # Saving the model
+
+              Let's save our final model as a pickle file
+
+
+              ```python
+              import pickle
+
+              with open('model', 'wb') as file:
+                  pickle.dump(logreg_new, file)
+              ```
+
+              Let's also save the scaler we used to standardize our data!
+
+
+              ```python
+              with open('scaler', 'wb') as file:
+                  pickle.dump(coltransformer, file)
+              ```
+
+
+              ```python
+
+              ```
