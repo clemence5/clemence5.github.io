@@ -1,5 +1,5 @@
 ---
-title: "Absenteeism in the Workplace: Building a model to predict absenteeism"
+title: "Absenteeism in the Workplace: Predictions with a Logistic Regression Classifier"
 date: 2019-10-12
 tags: [Logistic Regression Classification]
 excerpt: "Machine Learning, Absenteeism, Business, Data Science"
