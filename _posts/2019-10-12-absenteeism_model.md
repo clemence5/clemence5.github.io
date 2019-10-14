@@ -1258,51 +1258,18 @@ eli5.show_weights(perm2, feature_names=X_tr.columns.tolist())
 
 
 
+---
 
-    <style>
-    table.eli5-weights tr:hover {
+
+<style>
+ table.eli5-weights tr:hover {
         filter: brightness(85%);
     }
 </style>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <table class="eli5-weights eli5-feature-importances" style="border-collapse: collapse; border: none; margin-top: 0em; table-layout: auto;">
+<table class="eli5-weights eli5-feature-importances" style="border-collapse: collapse; border: none; margin-top: 0em; table-layout: auto;">
     <thead>
     <tr style="border: none;">
         <th style="padding: 0 1em 0 0.5em; text-align: right; border: none;">Weight</th>
@@ -1444,7 +1411,7 @@ eli5.show_weights(perm2, feature_names=X_tr.columns.tolist())
         </tr>
 
 
-    </tbody>
+      </tbody>
 </table>
 
 
@@ -1492,7 +1459,7 @@ plt.show()
 
 
 
-![png](output_44_1.png)
+<img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/output_44_1.png" width="2000" height="1600" alt="Feature Importances before and after feature selection">
 
 
 
@@ -1511,9 +1478,9 @@ score_table.index = ['train accuracy', 'test accuracy']
 score_table
 ```
 
-    [1mNew Accuracies:[0m
+    **New Accuracies:**
     Train Accuracy= 74.64%	 Test Accuracy = 74.643%
-    [1mOld Accuracies:[0m
+    **Old Accuracies:**
     Train Accuracy= 75.89%	 Test Accuracy = 76.429%      
      --------------------------------------------------------------
 
@@ -1580,6 +1547,3 @@ Let's also save the scaler we used to standardize our data!
 with open('scaler', 'wb') as file:
     pickle.dump(coltransformer, file)
 ```
-
-
-`
