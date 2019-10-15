@@ -394,13 +394,14 @@ The decision to standardize or not to standardize ultimately depends on the data
 
 This topic could be an entire post on its own, but this is the gist of it.
 
-**TLDR:** Standardization tells us the average spread of the observations from the mean of the feature, and it is useful for comparing different features and datasets. In short: 🍏🍊 $$\underrightarrow{\mbox{standardization}}$$ 🍎🍏.
+**TLDR:** Standardization tells us the average spread of the observations from the mean of the feature, and it is useful for comparing different features and datasets.  
+
+*TLDR for the TLDR*: 🍏🍊 $$\underrightarrow{\mbox{standardization}}$$ 🍎🍏.
 
 
-For further browsing, try [This Quora question and answers](https://www.quora.com/Why-is-it-useful-to-standardize-a-variable), [This Humans of data article](https://humansofdata.atlan.com/2018/12/data-standardization/) and [One of a ton of Medium articles on the topic](https://medium.com/@joelvarmadirisam/my-take-on-why-do-we-need-to-standardize-the-data-1459e6608a63).
+See [this *Quora* question and its answers](https://www.quora.com/Why-is-it-useful-to-standardize-a-variable), [this *Humans of data* article](https://humansofdata.atlan.com/2018/12/data-standardization/) or [One of a ton of Medium articles on the topic](https://medium.com/@joelvarmadirisam/my-take-on-why-do-we-need-to-standardize-the-data-1459e6608a63).
 
 ---
-
 
 
 Now, we are building a binary classifier, there are some columns which are already binary (0,1) and will not need scaling in our dataset

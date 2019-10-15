@@ -10,7 +10,7 @@
   padding-right: 1em;
   -webkit-animation: $intro-transition;
   animation: $intro-transition;
-  max-width: 93%;
+  max-width: 90%;
   -webkit-animation-delay: 0.15s;
   animation-delay: 0.15s;
 
@@ -65,7 +65,9 @@
   font-family: $global-font-family;
   font-size: $type-size-4;
 }
-
+.page__content {
+  text-align: justify;
+}
 .page__content {
   h2 {
     padding-bottom: 0.5em;
