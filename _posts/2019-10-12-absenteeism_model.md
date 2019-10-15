@@ -1531,8 +1531,18 @@ score_table
 
 # Productionalising the model
 
-Let's save our final model as a pickle file
+Based on the one's needs, the trained model may be saved in a variety of ways for future use.
+* One could write a python module that can be emailed to colleagues and simply imported to make further predictions, for static, batch predictions
+* Alternatively, a Docker container, apparently could be most helpful. DON'T ask me about Docker Containers, yet 🙃  
+* Web services, such as [Amazon SageMaker](https://aws.amazon.com/getting-started/tutorials/build-train-deploy-machine-learning-model-sagemaker/) accepts Jupyter Notebooks.  
+This is one of the most commonly used options for industrial use, as Amazon's AWS provides the infrastructure for the model deployment
+* I have also recently come across [Flask](https://towardsdatascience.com/productionizing-your-machine-learning-model-221468b0726d), which may also be worth checking out...
 
+[Håkon Hapnes Strand](https://www.quora.com/profile/H%C3%A5kon-Hapnes-Strand) covered this subject in succinctly in this [Quora Answer](https://www.quora.com/How-do-you-take-a-machine-learning-model-to-production).
+
+Anyway, we can easily save our final model as a [pickle file](https://pythontips.com/2013/08/02/what-is-pickle-in-python/)
+
+![Pickle Rick](https://ksassets.timeincuk.net/wp/uploads/sites/55/2017/08/Screen-shot-2017-08-09-at-11.53.27-920x584.png)
 
 ```python
 import pickle
@@ -1548,3 +1558,7 @@ Let's also save the scaler we used to standardize our data!
 with open('scaler', 'wb') as file:
     pickle.dump(coltransformer, file)
 ```
+
+And that's it for now...
+
+Send your comments and suggestions to my email!
