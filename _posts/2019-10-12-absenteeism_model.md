@@ -1533,7 +1533,7 @@ score_table
 
 Based on one's needs, the trained model may be saved in a variety of ways for future use.
 * One could write a python module that can be emailed to colleagues and simply imported to make further predictions, for static, batch predictions
-* Alternatively, a Docker container, apparently could be most helpful. DON'T ask me about Docker Containers, **yet* 🙃  
+* Alternatively, a Docker container, apparently could be most helpful. DON'T ask me about Docker Containers, *yet* 🙃  
 * Web services such as [Amazon SageMaker](https://aws.amazon.com/getting-started/tutorials/build-train-deploy-machine-learning-model-sagemaker/) accept Jupyter Notebooks.  
 This is one of the most commonly used options for industrial use, as Amazon's AWS provides the infrastructure for the model deployment
 * I have also recently come across [Flask](https://towardsdatascience.com/productionizing-your-machine-learning-model-221468b0726d), which may also be worth checking out...
