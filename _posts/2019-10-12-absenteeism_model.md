@@ -307,6 +307,8 @@ plt.show()
 
 <img src="{{ site.url }}{{ site.baseurl }}/images/absenteeism/output_11_0.png" width="1800" height="1200" alt="Excessive absenteeism countplot">
 
+<img src="{{ site.url }}{{ site.baseurl }}/images/the_stars_21_1.png" width="1800" height="1200" alt="graph of stuff">
+
 Thus, using logistic regression, we will classify employees into 2 categories:
 
 **class 1:** Excessively absent $$\le median \le$$ **class 2:** moderately to non-absconding.
